@@ -244,13 +244,15 @@ def sent_encode(tokenizer, sent):
             )
 
 
-def get_model(model_type, num_layers, all_layers=None):
+def get_model(model_type, model_path, num_layers, all_layers=None):
     if model_type.startswith("scibert"):
         model = AutoModel.from_pretrained(cache_scibert(model_type))
     elif "t5" in model_type:
         from transformers import T5EncoderModel
 
         model = T5EncoderModel.from_pretrained(model_type)
+    elif model_path:
+        model = AutoModel.from_pretrained(model_path)
     else:
         model = AutoModel.from_pretrained(model_type)
     model.eval()
@@ -724,3 +726,4 @@ def cache_scibert(model_type, cache_folder="~/.cache/torch/transformers"):
                 )
 
     return filename
+

@@ -25,6 +25,7 @@ class BERTScorer:
     def __init__(
         self,
         model_type=None,
+        model_path=None,
         num_layers=None,
         batch_size=64,
         nthreads=4,
@@ -91,11 +92,13 @@ class BERTScorer:
             self._num_layers = model2layers[self.model_type]
         else:
             self._num_layers = num_layers
+        
+        self.model_path = model_path
 
         # Building model and tokenizer
         self._use_fast_tokenizer = use_fast_tokenizer
         self._tokenizer = get_tokenizer(self.model_type, self._use_fast_tokenizer)
-        self._model = get_model(self.model_type, self.num_layers, self.all_layers)
+        self._model = get_model(self.model_type, self.model_path, self.num_layers, self.all_layers)
         self._model.to(self.device)
 
         self._idf_dict = None
@@ -347,3 +350,4 @@ class BERTScorer:
 
     def __str__(self):
         return self.__repr__()
+
